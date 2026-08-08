@@ -3,6 +3,7 @@ const cors = require("cors");
 const app = express();
 const cookieparser = require("cookie-parser");
 const authRouters = require("./routes/user.route");
+const captainRouters = require("./routes/captain.route");
 const errorHandler = require("./middlewares/error.middleware");
 
 app.use(cors());
@@ -17,6 +18,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", authRouters);
+app.use("/captains", captainRouters);
 
 app.use(errorHandler);
 

@@ -168,3 +168,73 @@ This endpoint clears the authentication cookie and blacklists the active token s
   "message": "User logged out successfully"
 }
 ```
+
+## `POST /captains/register`
+Register a new captain account.
+
+### Description
+This endpoint validates the captain registration data, checks whether the email already exists, hashes the password, and creates a new captain with vehicle details. On success, it returns the created captain information and a JWT token.
+
+### Required Request Body
+Send a JSON object with the following structure:
+
+```json
+{
+  "fullname": {
+    "firstname": "Alex",
+    "lastname": "Stone"
+  },
+  "email": "alex@example.com",
+  "password": "captain123",
+  "vehicle": {
+    "color": "Black",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+### Field Rules
+- `fullname.firstname` - required, minimum 3 characters
+- `fullname.lastname` - optional, minimum 3 characters if provided
+- `email` - required, must be a valid email address
+- `password` - required, minimum 6 characters
+- `vehicle.color` - required, minimum 3 characters
+- `vehicle.plate` - required, minimum 3 characters
+- `vehicle.capacity` - required, integer greater than or equal to 1
+- `vehicle.vehicleType` - required, must be one of `car`, `bike`, or `auto`
+
+### Status Codes
+- `201 Created` - Captain successfully created
+- `400 Bad Request` - Validation failed or required data is missing
+- `409 Conflict` - A captain with this email already exists
+
+### Example Success Response
+```json
+{
+  "message": "Captain successfully created",
+  "captain": {
+    "_id": "66b7f1c9e0a1c7b7f2a12345",
+    "fullname": {
+      "firstname": "Alex",
+      "lastname": "Stone"
+    },
+    "email": "alex@example.com",
+    "vehicle": {
+      "color": "Black",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  },
+  "token": "<jwt-token>"
+}
+```
+
+### Example Conflict Response
+```json
+{
+  "message": "Captain with this email already exists"
+}
+```

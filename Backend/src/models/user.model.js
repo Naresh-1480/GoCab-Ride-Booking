@@ -55,7 +55,7 @@ userSchema.methods.generateAuthToken = function () {
  * @returns {Promise<boolean>} True when the passwords match.
  */
 userSchema.methods.comparePassword = async function (password) {
-  await bcrypt.compare(password, this.password);
+  return await bcrypt.compare(password, this.password);
 };
 
 /**

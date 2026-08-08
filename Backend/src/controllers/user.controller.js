@@ -2,15 +2,6 @@ const userModel = require("../models/user.model");
 const { validationResult } = require("express-validator");
 const { createUser } = require("../services/user.service");
 
-/**
- * Registers a new user after validating the request body and hashing the
- * password before persisting the user record.
- *
- * @async
- * @param {import("express").Request} req - Express request object.
- * @param {import("express").Response} res - Express response object.
- * @returns {Promise<void>}
- */
 const registerUser = async (req, res) => {
   const errors = validationResult(req);
 
@@ -83,6 +74,12 @@ const loginUser = async (req, res) => {
 
   const token = user.generateAuthToken();
 
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+  });
+
   return res.status(200).json({
     message: "User logged in successfully",
     user: {
@@ -94,4 +91,10 @@ const loginUser = async (req, res) => {
   });
 };
 
-module.exports = { registerUser, loginUser };
+const getUserProfile = async (req, res) => {
+  return res.status(200).json({
+    message: "User profile fetched successfully",
+    user: req.user,
+  });
+};
+module.exports = { registerUser, loginUser, getUserProfile };

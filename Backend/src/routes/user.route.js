@@ -2,12 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
 const userController = require("../controllers/user.controller");
+const authMiddleware = require("../middlewares/auth.middleware");
 
-/**
- * Registers the user creation endpoint with request validation rules.
- *
- * POST /users/register
- */
 router.post(
   "/register",
   [
@@ -28,11 +24,6 @@ router.post(
   userController.registerUser,
 );
 
-/**
- * Login endpoint for user authentication.
- *
- * POST /users/login
- */
 router.post(
   "/login",
   [
@@ -49,5 +40,7 @@ router.post(
   ],
   userController.loginUser,
 );
+
+router.get("/profile", authMiddleware, userController.getUserProfile);
 
 module.exports = router;

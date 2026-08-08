@@ -7,6 +7,10 @@ const app = require("./src/app");
 const PORT = process.env.PORT || 3000;
 const connectDB = require("./src/db/db");
 
+/**
+ * Bootstraps the application by connecting to MongoDB first and then starting
+ * the HTTP server once the database connection is ready.
+ */
 connectDB()
   .then(() => {
     const server = http.createServer(app);

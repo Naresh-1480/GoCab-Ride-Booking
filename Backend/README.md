@@ -118,3 +118,53 @@ Send a JSON object with the following structure:
   "message": "Invalid email or password"
 }
 ```
+
+## `GET /users/profile`
+Fetch the authenticated user's profile information.
+
+### Description
+This endpoint returns the profile of the currently authenticated user. It requires a valid JWT token passed through a cookie named `token` or an `Authorization` header using the `Bearer` scheme.
+
+### Authentication
+- Required: Yes
+- Token source: `token` cookie or `Authorization: Bearer <token>`
+
+### Status Codes
+- `200 OK` - Profile fetched successfully
+- `401 Unauthorized` - Missing, invalid, expired, or blacklisted token
+
+### Example Success Response
+```json
+{
+  "message": "User profile fetched successfully",
+  "user": {
+    "_id": "66b7f1c9e0a1c7b7f2a12345",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john@example.com"
+  }
+}
+```
+
+## `GET /users/logout`
+Log out the currently authenticated user.
+
+### Description
+This endpoint clears the authentication cookie and blacklists the active token so it cannot be used again.
+
+### Authentication
+- Required: Yes
+- Token source: `token` cookie or `Authorization: Bearer <token>`
+
+### Status Codes
+- `200 OK` - User logged out successfully
+- `401 Unauthorized` - Missing, invalid, expired, or blacklisted token
+
+### Example Success Response
+```json
+{
+  "message": "User logged out successfully"
+}
+```

@@ -238,3 +238,107 @@ Send a JSON object with the following structure:
   "message": "Captain with this email already exists"
 }
 ```
+
+## `POST /captains/login`
+Log in an existing captain.
+
+### Description
+This endpoint validates the captain's email and password, checks the credentials, and returns a JWT token when the login is successful.
+
+### Required Request Body
+Send a JSON object with the following structure:
+
+```json
+{
+  "email": "alex@example.com",
+  "password": "captain123"
+}
+```
+
+### Field Rules
+- `email` - required, must be a valid email address
+- `password` - required, minimum 6 characters
+
+### Status Codes
+- `200 OK` - Captain logged in successfully
+- `400 Bad Request` - Validation failed or required data is missing
+- `401 Unauthorized` - Email or password is invalid
+
+### Example Success Response
+```json
+{
+  "message": "Captain logged in successfully",
+  "captain": {
+    "_id": "66b7f1c9e0a1c7b7f2a12345",
+    "fullname": {
+      "firstname": "Alex",
+      "lastname": "Stone"
+    },
+    "email": "alex@example.com"
+  },
+  "token": "<jwt-token>"
+}
+```
+
+### Example Unauthorized Response
+```json
+{
+  "message": "Invalid email or password"
+}
+```
+
+## `GET /captains/profile`
+Fetch the authenticated captain's profile information.
+
+### Description
+This endpoint returns the profile of the currently authenticated captain. It requires a valid JWT token passed through a cookie named `token` or an `Authorization` header using the `Bearer` scheme.
+
+### Authentication
+- Required: Yes
+- Token source: `token` cookie or `Authorization: Bearer <token>`
+
+### Status Codes
+- `200 OK` - Profile fetched successfully
+- `401 Unauthorized` - Missing, invalid, expired, or blacklisted token
+
+### Example Success Response
+```json
+{
+  "message": "Captain profile fetched successfully",
+  "captain": {
+    "_id": "66b7f1c9e0a1c7b7f2a12345",
+    "fullname": {
+      "firstname": "Alex",
+      "lastname": "Stone"
+    },
+    "email": "alex@example.com",
+    "vehicle": {
+      "color": "Black",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+## `GET /captains/logout`
+Log out the currently authenticated captain.
+
+### Description
+This endpoint clears the authentication cookie and blacklists the active token so it cannot be used again.
+
+### Authentication
+- Required: Yes
+- Token source: `token` cookie or `Authorization: Bearer <token>`
+
+### Status Codes
+- `200 OK` - Captain logged out successfully
+- `401 Unauthorized` - Missing, invalid, expired, or blacklisted token
+
+### Example Success Response
+```json
+{
+  "message": "Captain logged out successfully"
+}
+```
